@@ -26,11 +26,9 @@ exit_procedure() {
 	exit 1
 }
 
-VERSION_GENERATOR="latest"
-VERSION_FORMATTER="latest"
-GENERATOR_PORT=8080
-FORMATTER_PORT=8081
-DOCKER_NETWORK="timestamp-network"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=deploy.conf
+source "${SCRIPT_DIR}/deploy.conf"
 
 for arg in "$@"; do
     case $arg in

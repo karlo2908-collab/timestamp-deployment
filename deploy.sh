@@ -38,6 +38,10 @@ for arg in "$@"; do
         --version_formatter=*) VERSION_FORMATTER="${arg#*=}" ;;
         --generator_port=*) GENERATOR_PORT="${arg#*=}" ;;
         --formatter_port=*) FORMATTER_PORT="${arg#*=}" ;;
+        --generator_cpu=*) GENERATOR_CPU="${arg#*=}" ;;
+        --formatter_cpu=*) FORMATTER_CPU="${arg#*=}" ;;
+        --generator_memory=*) GENERATOR_MEMORY="${arg#*=}" ;;
+        --formatter_memory=*) FORMATTER_MEMORY="${arg#*=}" ;;
         --docker_network=*) DOCKER_NETWORK="${arg#*=}" ;;
         *) echo "Unknown argument: $arg"; exit 1 ;;
     esac
@@ -57,6 +61,8 @@ echo "Starting docker container for generator service"
 docker run -d \
     --name timestamp-generator \
     --network "${DOCKER_NETWORK}" \
+	  --cpus "${GENERATOR_CPU}" \
+	  --memory "${GENERATOR_MEMORY}" \
     -p "${GENERATOR_PORT}":8080 \
     karslo92111/timestamp-generator:"${VERSION_GENERATOR}"
 
@@ -64,6 +70,8 @@ echo "Starting docker container for formatter service"
 docker run -d \
     --name timestamp-formatter \
     --network "${DOCKER_NETWORK}" \
+	  --cpus "${FORMATTER_CPU}" \
+	  --memory "${FORMATTER_MEMORY}" \
     -p "${FORMATTER_PORT}":8080 \
     -e GENERATOR_SERVICE_URL=http://timestamp-generator:8080 \
     karslo92111/timestamp-formatter:"${VERSION_FORMATTER}" 

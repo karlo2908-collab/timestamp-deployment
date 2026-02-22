@@ -13,3 +13,9 @@ jobs:
 
       - name: Deploy
         run: bash deploy.sh
+
+      - name: Build integration test image
+        run: docker build -t timestamp-integration-test ./tests/integration/
+
+      - name: Run integration tests
+        run: docker run -e FORMATTER_URL=http://localhost:8081 timestamp-integration-test
